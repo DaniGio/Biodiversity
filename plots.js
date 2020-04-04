@@ -45,13 +45,6 @@ function buildCharts(sample) {
     d3.json("samples.json").then(function ({samples,metadata}) {
         var data = samples.filter(obj=>obj.id==sample)[0]
        
-
-        // // Slice the first 10 objects for plotting
-        // data = data.slice(0, 10);
-
-        // // Reverse the array due to Plotly's defaults
-        // data = data.reverse();
-
         // Trace1 for the Bacterial species
         var trace1 = {
             x: data.sample_values.slice(0, 10).reverse(),
@@ -99,8 +92,8 @@ function buildCharts(sample) {
             mode: 'markers',
             text: data.otu_labels,
             marker: {
-                color: data.otu_ids,
-                // opacity: [1, 0.8, 0.6, 0.4],
+                color: data.otu_ids, 
+                opacity: [1, 0.8, 0.6, 0.4],
                 size: data.sample_values
             }
         };
@@ -108,10 +101,10 @@ function buildCharts(sample) {
         var bubbledata = [trace1];
 
         var layout = {
-            title: 'Marker Size and Color',
+            title: 'Frequency of all the bacterial species found in a volunteer’s navel',
             showlegend: false,
-            height: 600,
-            width: 600
+            height: 800,
+            width: 1200
         };
 
         Plotly.newPlot('bubble', bubbledata, layout);
@@ -128,22 +121,33 @@ function buildCharts(sample) {
             {
                 domain: { x: [0, 1], y: [0, 1] },
                 value: wfreq,
-                title: { text: "Speed" },
+                title: { text: "Belly Button Washing Frequency" },
                 type: "indicator",
                 mode: "gauge+number",
-                // delta: { reference: 380 },
+                
                 gauge: {
                     axis: { range: [0, 9] },
-                    bar: { color: "darkblue" },
+                    bar: { color: "#4D5160" },
+   
                     steps: [
-                        { range: [0, 4.5], color: "lightgray" },
-                        { range: [4.5, 9], color: "gray" }
+                        { range: [0, 1], color: "#D5DBF0", title:"0-1" },
+                        { range: [1, 2], color: "#B7C2E5" },
+                        { range: [2, 3], color: "#889AD7" },
+                        { range: [3, 4], color: "#6880CE" },
+                        { range: [4, 5], color: "#4865C5" },
+                        { range: [5, 6], color: "#395BCA" },
+                        { range: [6, 7], color: "#2B4DBF" },
+                        { range: [7, 8], color: "#2143B4" },
+                        { range: [8, 9], color: "#1639AB" },
+                        // text: ['0-1', '1-2', '2-3', '3-4', '4-5','5-6', '6-7','7-8', '8-9',''],
+                        // textinfo: 'text',
+                        // textposition:'inside'
                     ],
-                    // threshold: {
-                    //     line: { color: "red", width: 4 },
-                    //     thickness: 0.75,
-                    //     value: 490
-                    // }
+                    threshold: {
+                        line: { color: "red", width: 4 },
+                        thickness: 0.75,
+                        value: wfreq
+                    }
                 }
             }
         ];
